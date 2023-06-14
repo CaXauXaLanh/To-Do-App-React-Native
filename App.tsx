@@ -5,67 +5,17 @@
  * @format
  */
 
-import React, {useState} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  TextInput,
-  Button,
-  Alert,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from 'react-native';
-import Header from './components/header';
-import TodoItem from './components/todoitem';
-import AddTodo from './components/addTodo';
+import React from 'react';
+import {StyleSheet} from 'react-native';
+
+import {NavigationContainer} from '@react-navigation/native';
+import {DrawerNavigator} from './navigations/DrawerNavigator';
 
 export default function App() {
-  const [todos, setTodos] = useState([
-    {text: 'hoc bai', key: '1'},
-    {text: 'Choi game', key: '2'},
-    {text: 'Nau com', key: '3'},
-  ]);
-
-  const pressHandler = (key: string) => {
-    setTodos(prevTodos => {
-      return prevTodos.filter(todos => todos.key != key);
-    });
-  };
-
-  const submitHandler = (text: string) => {
-    if (text.length > 3) {
-      setTodos(prevTodos => {
-        return [{text: text, key: Math.random().toString()}, ...prevTodos];
-      });
-    } else {
-      Alert.alert('OOPS!', 'Bạn cần nhập nhiều hơn 3 ký tự', [
-        {text: 'Đã hiểu'},
-      ]);
-    }
-  };
-
   return (
-    <TouchableWithoutFeedback onPress={() => {
-      Keyboard.dismiss()
-    }}>
-      <View style={styles.container}>
-        <Header />
-        <View style={styles.content}>
-          <AddTodo submitHandler={submitHandler} />
-          <View style={styles.list}>
-            <FlatList
-              data={todos}
-              renderItem={({item}) => (
-                <TodoItem item={item} pressHandler={pressHandler} />
-              )}
-            />
-          </View>
-        </View>
-      </View>
-    </TouchableWithoutFeedback>
+    <NavigationContainer>
+      <DrawerNavigator />
+    </NavigationContainer>
   );
 }
 

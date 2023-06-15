@@ -1,5 +1,15 @@
 import React from 'react';
-import {Image, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  Image,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
+
+const MAX_SCREEN_WIDTH = Dimensions.get('window').width;
+const colorWidth = MAX_SCREEN_WIDTH / 3;
+const colorHeight = MAX_SCREEN_WIDTH / 3;
 
 export const ChooseColor = ({route, navigation}) => {
   const {colors, setColor} = route.params;
@@ -15,7 +25,11 @@ export const ChooseColor = ({route, navigation}) => {
             <View style={styles.color}>
               <Image
                 source={item.value}
-                style={{height: 110, width: 110, borderRadius: 10}}
+                style={{
+                  height: colorHeight,
+                  width: '100%',
+                  borderRadius: 10,
+                }}
               />
             </View>
           </TouchableOpacity>
@@ -27,7 +41,7 @@ export const ChooseColor = ({route, navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 15,
+    // margin: 15,
   },
   containerColor: {
     flex: 1,
@@ -38,6 +52,7 @@ const styles = StyleSheet.create({
   },
   color: {
     padding: 5,
+    width: colorWidth,
     justifyContent: 'center',
     alignItems: 'center',
   },

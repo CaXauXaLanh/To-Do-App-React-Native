@@ -28,54 +28,54 @@ export const DetailTask = ({route, navigation}) => {
 
   return (
     <>
-      <ScrollView>
-        <View style={styles.container}>
-          <View style={[styles.header]}>
-            <View style={{borderBottomWidth: 0.5}}>
-              <View style={{margin: 15}}>
-                <View>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.goBack();
-                    }}
-                    style={{width: 30}}>
-                    <FontAwesomeIcon icon={faXmark} size={25} />
-                  </TouchableOpacity>
-                  <Text style={[styles.headerText, {color: '#000'}]}>
-                    {detail.name}
-                  </Text>
-                  <Text style={{marginTop: 10}}>in list Workspace 1</Text>
-                </View>
-              </View>
-            </View>
-            <View style={{borderBottomWidth: 0.5, borderBottomColor: '#ccc'}}>
-              <View style={{margin: 15}}>
-                <Text style={{fontSize: 16, fontWeight: 500, color: 'black'}}>
-                  Quick action
-                </Text>
-                <TouchableOpacity>
-                  <View style={styles.buttonUser}>
-                    <View
-                      style={{
-                        padding: 10,
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        height: '100%',
-                      }}>
-                      <FontAwesomeIcon
-                        icon={faUserCircle}
-                        color="#008000"
-                        style={{marginRight: 10}}
-                        size={22}
-                      />
-                      <Text style={{color: '#f2f2f2'}}>Members</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              </View>
+      <View style={[styles.header]}>
+        <View style={{borderBottomWidth: 0.5}}>
+          <View style={{margin: 15}}>
+            <View>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                style={{width: 30}}>
+                <FontAwesomeIcon icon={faXmark} size={25} />
+              </TouchableOpacity>
+              <Text style={[styles.headerText, {color: '#000'}]}>
+                {detail.name}
+              </Text>
+              <Text style={{marginTop: 10}}>in list Workspace 1</Text>
             </View>
           </View>
+        </View>
+        <View style={{borderBottomWidth: 0.5, borderBottomColor: '#ccc'}}>
+          <View style={{margin: 15}}>
+            <Text style={{fontSize: 16, fontWeight: 500, color: 'black'}}>
+              Quick action
+            </Text>
+            <TouchableOpacity>
+              <View style={styles.buttonUser}>
+                <View
+                  style={{
+                    padding: 10,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100%',
+                  }}>
+                  <FontAwesomeIcon
+                    icon={faUserCircle}
+                    color="#008000"
+                    style={{marginRight: 10}}
+                    size={22}
+                  />
+                  <Text style={{color: '#f2f2f2'}}>Members</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+      <ScrollView>
+        <View style={styles.container}>
           <View style={styles.content}>
             <View style={{margin: 15}}>
               <Text

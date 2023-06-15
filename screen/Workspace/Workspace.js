@@ -160,7 +160,7 @@ export const Workspace = ({navigation, route}) => {
       <View style={{paddingTop: 10}}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           {mockData.map(data => (
-            <Column data={data} navigation={navigation} />
+            <Column data={data} navigation={navigation} key={data.id} />
           ))}
         </ScrollView>
       </View>

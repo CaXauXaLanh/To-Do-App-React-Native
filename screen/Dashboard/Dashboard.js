@@ -3,6 +3,23 @@ import {Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 
+const data = [
+  {
+    name: 'Workspace 1',
+    image:
+      'https://c0.wallpaperflare.com/preview/107/714/504/interior-office-workspace-computer.jpg',
+  },
+  {
+    name: 'Workspace 2',
+    image:
+      'https://previews.123rf.com/images/sripfoto/sripfoto1710/sripfoto171000289/88574931-modern-workspace-with-laptop-tablet-smartphone-and-coffee-cup-copy-space-on-wood-background-top.jpg',
+  },
+  {
+    name: 'Workspace 3',
+    image:
+      'https://png.pngtree.com/thumb_back/fh260/background/20230331/pngtree-styled-workspace-with-laptop-photo-image_2188139.jpg',
+  },
+];
 export const Dashboard = ({navigation}) => {
   return (
     <View style={styles.contain}>
@@ -10,55 +27,26 @@ export const Dashboard = ({navigation}) => {
         <Text style={styles.text}>TABLE</Text>
       </View>
       <View style={styles.workspaceWrapper}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Workspace')}
-          style={styles.taskWrapper}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Image
-              source={require('../../asset/background1.jpg')}
-              style={styles.imageWorkspace}
-            />
-            <View style={styles.titleWorkspace}>
-              <Text style={{color: 'rgba(255, 255, 255, 1)'}}>
-                This is a workspaceadasdasdsaddsadsafsdffsd
-              </Text>
+        {data.map(item => (
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('Workspace', {image: item.image})
+            }
+            style={styles.taskWrapper}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Image source={{uri: item.image}} style={styles.imageWorkspace} />
+              <View style={styles.titleWorkspace}>
+                <Text style={{color: 'rgba(255, 255, 255, 1)'}}>
+                  {item.name}
+                </Text>
+              </View>
             </View>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Workspace')}
-          style={styles.taskWrapper}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Image
-              source={require('../../asset/background2.jpg')}
-              style={styles.imageWorkspace}
-            />
-            <View style={styles.titleWorkspace}>
-              <Text style={{color: 'rgba(255, 255, 255, 1)'}}>
-                This is a workspace
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Workspace')}
-          style={styles.taskWrapper}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Image
-              source={require('../../asset/background3.jpg')}
-              style={styles.imageWorkspace}
-            />
-            <View style={styles.titleWorkspace}>
-              <Text style={{color: 'rgba(255, 255, 255, 1)'}}>
-                This is a workspace
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        ))}
       </View>
       <TouchableOpacity
         onPress={() => {
-          console.log('haha');
+          navigation.navigate('Create Board');
         }}
         style={styles.roundButton}>
         <FontAwesomeIcon icon={faPlus} color={'#fff'} size={20} />

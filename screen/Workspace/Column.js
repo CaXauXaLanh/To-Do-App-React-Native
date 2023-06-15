@@ -3,19 +3,16 @@ import {FlatList, View, StyleSheet, Text, ScrollView} from 'react-native';
 import {Row} from './Row';
 
 export const Column = ({data, navigation}) => {
-  const renderItem = ({item}) => <Row item={item} navigation={navigation} />;
-
   return (
     <View style={styles.column}>
       <View style={styles.headerWrap}>
         <Text style={styles.headerText}>{data.name}</Text>
       </View>
-      <FlatList
-        data={data.rows}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        showsVerticalScrollIndicator={false}
-      />
+      <ScrollView>
+        {data.rows.map(item => (
+          <Row item={item} navigation={navigation} />
+        ))}
+      </ScrollView>
       <View style={{paddingTop: 10}}>
         <Text style={{fontSize: 15, color: '#0C66E4', fontWeight: 500}}>
           {'+ Add task'}

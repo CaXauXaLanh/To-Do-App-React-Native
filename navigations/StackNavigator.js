@@ -4,6 +4,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Workspace from '../screen/Workspace';
 import Dashboard from '../screen/Dashboard';
 import DetailTask from '../screen/DetailTask';
+import CreateBoard from '../screen/CreateBoard';
+import ChooseColor from '../screen/ChooseColor';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
@@ -17,6 +19,7 @@ const screenOptionStyle = {
   },
   headerTintColor: 'white',
   headerBackTitle: 'Back',
+  animation: 'slide_from_right',
 };
 
 export const MainStackNavigator = ({navigation}) => {
@@ -68,8 +71,6 @@ export const MainStackNavigator = ({navigation}) => {
         component={DetailTask}
         options={{
           headerShown: false,
-          gestureDirection: 'vertical',
-          gestureEnabled: true,
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
@@ -79,6 +80,15 @@ export const MainStackNavigator = ({navigation}) => {
           ),
         }}
       />
+      <Stack.Screen
+        name={'Create Board'}
+        component={CreateBoard}
+        options={{
+          presentation: 'modal',
+          animationTypeForReplace: 'push',
+        }}
+      />
+      <Stack.Screen name={'Choose color'} component={ChooseColor} />
     </Stack.Navigator>
   );
 };

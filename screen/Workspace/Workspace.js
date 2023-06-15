@@ -11,7 +11,7 @@ import {Column} from './Column';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 
-export const Workspace = ({navigation, picture}) => {
+export const Workspace = ({navigation, route}) => {
   const mockData = [
     {
       id: '1',
@@ -19,47 +19,51 @@ export const Workspace = ({navigation, picture}) => {
       rows: [
         {
           id: '11',
-          name: 'Task 1',
+          name: 'Taxi Driver',
+          description:
+            'This is description\nThis is description\nThis is description\nThis is description\n',
+          members: [
+            'https://i.pinimg.com/736x/59/18/d8/5918d8e9040516b65f93c75a9c5b8175.jpg',
+            'https://thuthuatnhanh.com/wp-content/uploads/2021/02/Anh-avatar-bua-cute-dep-390x390.jpg',
+          ],
+          comments: [
+            {
+              name: 'Hoàng Thanh Tùng',
+              image:
+                'https://thuthuatnhanh.com/wp-content/uploads/2021/02/Anh-avatar-bua-cute-dep-390x390.jpg',
+              text: 'this task is so hard, pls help me',
+            },
+            {
+              name: 'Nguyễn Kim Quân',
+              image:
+                'https://i.pinimg.com/736x/59/18/d8/5918d8e9040516b65f93c75a9c5b8175.jpg',
+              text: 'no, do it yourself',
+            },
+          ],
         },
         {
           id: '12',
-          name: 'Task 2',
-        },
-        {
-          id: '13',
-          name: 'Task 3',
-        },
-        {
-          id: '14',
-          name: 'Task 4',
-        },
-        {
-          id: '15',
-          name: 'Task 5',
-        },
-        {
-          id: '16',
-          name: 'Task 6',
-        },
-        {
-          id: '17',
-          name: 'Task 7',
-        },
-        {
-          id: '18',
-          name: 'Task 8',
-        },
-        {
-          id: '19',
-          name: 'Task 9',
-        },
-        {
-          id: '111',
-          name: 'Task 10',
-        },
-        {
-          id: '112',
-          name: 'Task 11',
+          name: 'Luxury Perfume',
+          description:
+            'This is description\nThis is description\nThis is description\nThis is description\n',
+          members: [
+            'https://antimatter.vn/wp-content/uploads/2022/12/anh-avatar-facebook-vo-danh-avt-fb-cho-nu-1.jpg',
+            'https://kiemtientuweb.com/ckfinder/userfiles/images/avatar-fb/avatar-fb-1.jpg',
+          ],
+          comments: [
+            {
+              name: 'Hoàng Thanh Tùng',
+              image:
+                'https://kiemtientuweb.com/ckfinder/userfiles/images/avatar-fb/avatar-fb-1.jpg',
+              text: 'this is so cool, why you dont go live on Youtube',
+            },
+            {
+              name: 'Trần Đức Minh',
+              image:
+                'https://antimatter.vn/wp-content/uploads/2022/12/anh-avatar-facebook-vo-danh-avt-fb-cho-nu-1.jpg',
+              text: 'so stupid',
+            },
+          ],
         },
       ],
     },
@@ -69,15 +73,51 @@ export const Workspace = ({navigation, picture}) => {
       rows: [
         {
           id: '21',
-          name: 'Task 12',
+          name: 'Add custom date options',
+          description:
+            'This is description\nThis is description\nThis is description\nThis is description\n',
+          members: [
+            'https://khoinguonsangtao.vn/wp-content/uploads/2022/07/anh-avatar-facebook-ngau-hot-nhat-hien-nay.jpg',
+            'https://kiemtientuweb.com/ckfinder/userfiles/images/avatar-fb/avatar-fb-1.jpg',
+          ],
+          comments: [
+            {
+              name: 'Nguyễn Văn Luật',
+              image:
+                'https://kiemtientuweb.com/ckfinder/userfiles/images/avatar-fb/avatar-fb-1.jpg',
+              text: 'this is so cool, why you dont go live on Youtube',
+            },
+            {
+              name: 'Nguyễn Kim Quân',
+              image:
+                'https://khoinguonsangtao.vn/wp-content/uploads/2022/07/anh-avatar-facebook-ngau-hot-nhat-hien-nay.jpg',
+              text: 'omg thank iu',
+            },
+          ],
         },
         {
           id: '22',
-          name: 'Task 13',
-        },
-        {
-          id: '23',
-          name: 'Task 14',
+          name: 'Fix bug display',
+          description:
+            'This is description\nThis is description\nThis is description\nThis is description\n',
+          members: [
+            'https://antimatter.vn/wp-content/uploads/2022/12/anh-avatar-facebook-vo-danh-avt-fb-cho-nu-1.jpg',
+            'https://anhdep123.com/wp-content/uploads/2021/02/anh-avatar-hai-huoc.jpg',
+          ],
+          comments: [
+            {
+              name: 'Trần Đức Minh',
+              image:
+                'https://anhdep123.com/wp-content/uploads/2021/02/anh-avatar-hai-huoc.jpg',
+              text: 'wow you so smart',
+            },
+            {
+              name: 'Nguyễn Văn Luật',
+              image:
+                'https://antimatter.vn/wp-content/uploads/2022/12/anh-avatar-facebook-vo-danh-avt-fb-cho-nu-1.jpg',
+              text: 'haha dont make me laugh',
+            },
+          ],
         },
       ],
     },
@@ -87,21 +127,37 @@ export const Workspace = ({navigation, picture}) => {
       rows: [
         {
           id: '31',
-          name: 'Task 15',
-        },
-        {
-          id: '32',
-          name: 'Task 16',
+          name: 'Bug network',
+          description:
+            'This is description\nThis is description\nThis is description\nThis is description\n',
+          members: [
+            'https://antimatter.vn/wp-content/uploads/2022/12/hinh-anh-avatar-facebook-1.jpg',
+            'https://toigingiuvedep.vn/wp-content/uploads/2021/05/hinh-anh-avatar-facebook-nu-dep-doc.jpg',
+            'https://anhdep123.com/wp-content/uploads/2021/02/anh-avatar-hai-huoc.jpg',
+          ],
+          comments: [
+            {
+              name: 'Trần Quang Khánh',
+              image:
+                'https://toigingiuvedep.vn/wp-content/uploads/2021/05/hinh-anh-avatar-facebook-nu-dep-doc.jpg',
+              text: 'pls let me more time, this task so hard',
+            },
+            {
+              name: 'Nguyễn Văn Luật',
+              image:
+                'https://anhdep123.com/wp-content/uploads/2021/02/anh-avatar-hai-huoc.jpg',
+              text: 'ok but 50% salary',
+            },
+          ],
         },
       ],
     },
   ];
+  const {image} = route.params;
 
   return (
-    <ImageBackground
-      source={require('../../asset/background1.jpg')}
-      style={styles.workspaceContainer}>
-      <View style={{flex: 0.95, paddingTop: 10}}>
+    <ImageBackground source={{uri: image}} style={styles.workspaceContainer}>
+      <View style={{paddingTop: 10}}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           {mockData.map(data => (
             <Column data={data} navigation={navigation} />

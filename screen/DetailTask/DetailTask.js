@@ -8,18 +8,27 @@ import {
   Image,
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faXmark, faUserCircle, faList} from '@fortawesome/free-solid-svg-icons';
+import {
+  faXmark,
+  faUserCircle,
+  faList,
+  faPaperPlane,
+  faUser,
+} from '@fortawesome/free-solid-svg-icons';
 import {TextInput} from 'react-native-gesture-handler';
+import {Comment} from '../../components/Comment';
 
 const defaultText =
   'This is text Description with 4 lines\nThis is text Description with 4 lines\nThis is text Description with 4 lines\nThis is text Description with 4 lines\n';
 
-export const DetailTask = ({item, navigation}) => {
+export const DetailTask = ({route, navigation}) => {
   const [textDesc, setTextDesc] = useState(defaultText);
+  const [textCmt, setTextCmt] = useState('');
+  const {detail} = route.params;
 
   return (
     <>
-      <ScrollView style={{flex: 1}}>
+      <ScrollView>
         <View style={styles.container}>
           <View style={[styles.header]}>
             <View style={{borderBottomWidth: 0.5}}>
@@ -28,11 +37,12 @@ export const DetailTask = ({item, navigation}) => {
                   <TouchableOpacity
                     onPress={() => {
                       navigation.goBack();
-                    }}>
-                    <FontAwesomeIcon icon={faXmark} size={30} />
+                    }}
+                    style={{width: 30}}>
+                    <FontAwesomeIcon icon={faXmark} size={25} />
                   </TouchableOpacity>
                   <Text style={[styles.headerText, {color: '#000'}]}>
-                    Task 1
+                    {detail.name}
                   </Text>
                   <Text style={{marginTop: 10}}>in list Workspace 1</Text>
                 </View>
@@ -59,7 +69,7 @@ export const DetailTask = ({item, navigation}) => {
                         style={{marginRight: 10}}
                         size={22}
                       />
-                      <Text>Members</Text>
+                      <Text style={{color: '#f2f2f2'}}>Members</Text>
                     </View>
                   </View>
                 </TouchableOpacity>
@@ -95,13 +105,53 @@ export const DetailTask = ({item, navigation}) => {
               </View>
             </View>
           </View>
+          <View style={styles.memberContain}>
+            <View style={styles.memberList}>
+              <FontAwesomeIcon icon={faUser} style={{marginRight: 10}} />
+              {detail.members.length > 0 ? (
+                detail.members.map(image => (
+                  <Image
+                    source={{uri: image}}
+                    style={{height: 40, width: 40, borderRadius: 30}}
+                  />
+                ))
+              ) : (
+                <Text style={{color: '#262626'}}>Member</Text>
+              )}
+            </View>
+          </View>
+          <Comment dataComment={detail.comments} />
         </View>
       </ScrollView>
-      <View style={styles.commentContain}>
+      <View style={styles.footer}>
         <Image
           source={require('../../asset/avatar.jpg')}
           style={styles.avatar}
         />
+        <View style={styles.inputContain}>
+          <TextInput
+            editable
+            style={{
+              flex: 1,
+              height: 45,
+              textAlignVertical: 'center',
+              paddingLeft: 15,
+              fontSize: 16,
+              borderWidth: 0,
+            }}
+            value={textCmt}
+            onChangeText={text => setTextCmt(text)}
+            underlineColorAndroid="transparent"
+            placeholder="Add comment"
+          />
+          <TouchableOpacity disabled={!textCmt.trim()}>
+            <FontAwesomeIcon
+              icon={faPaperPlane}
+              style={{padding: 10, margin: 10}}
+              color={textCmt.trim() ? '#1a1aff' : '#ccc'}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     </>
   );
@@ -112,7 +162,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#ebebe0',
+    backgroundColor: '#e6e6e6',
   },
   header: {
     borderBottomWidth: 0.5,
@@ -145,11 +195,34 @@ const styles = StyleSheet.create({
     width: 40,
     borderRadius: 30,
   },
-  commentContain: {
+  footer: {
     backgroundColor: '#fff',
     height: 60,
     flexDirection: 'row',
     alignItems: 'center',
     padding: 15,
+    width: '100%',
+  },
+  inputContain: {
+    marginTop: 10,
+    borderWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignContent: 'center',
+    flex: 1,
+    marginLeft: 15,
+    borderRadius: 20,
+    marginBottom: 10,
+    borderColor: '#ccc',
+  },
+  memberContain: {
+    marginTop: 15,
+    backgroundColor: '#fff',
+  },
+  memberList: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: 25,
+    paddingVertical: 5,
   },
 });

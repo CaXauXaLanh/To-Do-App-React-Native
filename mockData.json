@@ -1,0 +1,17 @@
+"mockData": {[
+{"id": "1", "name": "TO DO", "rows":[
+{"id": "11", "name": "Taxi Driver", "description": "This is description\nThis is description\nThis is description\nThis is description\n", "members":[
+"https://i.pinimg.com/736x/59/18/d8/5918d8e9
+040516b65f93c75a9c5b8175.jpg","https: //thuthuatnhanh.com/wp-content/uploads/2021/02/Anh-avatar-bua-cute-dep-390x390.jpg"],"comment":[{"name":"Hoàng Thanh Tùng","image":"https://thuthuatnhanh.com/wp-content/uploads/2021/02/Anh-av
+atar-bua-cute-dep-390x390.jpg","text":"this task is so hard, pls help me"},{"name":"Nguyễn Kim Quân","user":"https: //i.pinimg.com/736x/59/18/d8/5918d8e9040516b65f93c75a9c5b8175.jpg","text":"no, do it yourself"}]},{"id":"12","nam
+e":"Luxury Perfume","description":"This is description\nThis is description\nThis is description\nThis is description\n","members":["https: //antimatter.vn/wp-content/uploads/2022/12/anh-avatar-facebook-vo-danh-avt-fb-cho-nu-1.jp
+g","https: //kiemtientuweb.com/ckfinder/userfiles/images/avatar-fb/avatar-fb-1.jpg"],"comment":[{"user":"https://kiemtientuweb.com/ckfinder/userfiles/images/avatar-fb/avatar-fb-1.jpg","text":"this is so cool, why you dont go live
+on Youtube"},{"user":"https: //antimatter.vn/wp-content/uploads/2022/12/anh-avatar-facebook-vo-danh-avt-fb-cho-nu-1.jpg","text":"so stupid"}]}]},{"id":"2","name":"DOING","rows":[{"id":"21","name":"Add custom date options","descr
+iption":"This is description\nThis is description\nThis is description\nThis is description\n","members":["https: //khoinguonsangtao.vn/wp-content/uploads/2022/07/anh-avatar-facebook-ngau-hot-nhat-hien-nay.jpg","https://kiemtient
+uweb.com/ckfinder/userfiles/images/avatar-fb/avatar-fb-1.jpg"],"comment":[{"user":"https: //kiemtientuweb.com/ckfinder/userfiles/images/avatar-fb/avatar-fb-1.jpg","text":"this is so cool, why you dont go live on Youtube"},{"user": "https://khoinguonsangtao.vn/wp-content/uploads/2022/07/anh-avatar-facebook-ngau-hot-nhat-hien-nay.jpg", "text": "omg thank iu"}
+]}, {"id": "22", "name": "Fix bug display", "description": "This is description\nThis is description\nThis
+is description\nThis is description\n","members":["https: //antimatter.vn/wp-content/uploads/2022/12/anh-avatar-facebook-vo-danh-avt-fb-cho-nu-1.jpg","https://anhdep123.com/wp-content/uploads/2021/02/anh-avatar-hai-huoc.jpg"],"co
+mment":[{"name":"Trần Đức Minh","image":"https: //anhdep123.com/wp-content/uploads/2021/02/anh-avatar-hai-huoc.jpg","text":"wow you so smart"},{"name":"Nguyễn Văn Luật","image":"https://antimatter.vn/wp-content/uploads/2022/12/an
+h-avatar-facebook-vo-danh-avt-fb-cho-nu-1.jpg","text":"haha dont make me laugh"}]}]},{"id":"3","name":"DONE","rows":[{"id":"31","name":"Bug network","description":"This is description\nThis is description\nThis is description\nT
+his is description\n","members":["https: //antimatter.vn/wp-content/uploads/2022/12/hinh-anh-avatar-facebook-1.jpg","https://toigingiuvedep.vn/wp-content/uploads/2021/05/hinh-anh-avatar-facebook-nu-dep-doc.jpg","https://anhdep123
+.com/wp-content/uploads/2021/02/anh-avatar-hai-huoc.jpg"],"comment":[{"name":"Trần Quang Khánh","image":"https: //toigingiuvedep.vn/wp-content/uploads/2021/05/hinh-anh-avatar-facebook-nu-dep-doc.jpg","text":"pls let me more time, this task so hard"},{"name":"Nguyễn Văn Luật","image":"https://anhdep123.com/wp-content/uploads/2021/02/anh-avatar-hai-huoc.jpg","text":"ok but 50% salary"}]}]}]}

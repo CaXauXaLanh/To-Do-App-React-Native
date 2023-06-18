@@ -26,17 +26,14 @@ export const Dashboard = ({navigation}) => {
       <View style={styles.workspaceWrapper}>
         {data.map(item => (
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('Workspace', {image: item.image})
-            }
+            onPress={() => navigation.navigate('Workspace', {image: item.img})}
             style={styles.taskWrapper}
             key={item.id}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
                 source={
-                  item?.image
-                    ? item.image
-                    : require('../../asset/colorBackground/cool-blues.jpg')
+                  item.image ||
+                  require('../../asset/colorBackground/cool-blues.jpg')
                 }
                 style={styles.imageWorkspace}
               />

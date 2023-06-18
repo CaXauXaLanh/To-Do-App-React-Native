@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {Tab} from '@rneui/themed';
 import TabViewContain from '../../components/TabView';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faXmark} from '@fortawesome/free-solid-svg-icons';
+import {AuthContext} from '../../context/AuthContext';
 
 const dataUser = {
   id: 123,
@@ -15,6 +16,7 @@ const dataUser = {
 };
 
 export const UserDetail = ({navigation}) => {
+  const {userInfo} = useContext(AuthContext);
   const [index, setIndex] = useState(0);
   const handleChangeTabIndex = index => {
     setIndex(index);
@@ -35,9 +37,9 @@ export const UserDetail = ({navigation}) => {
         />
         <View style={styles.displayName}>
           <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-            {dataUser.name}
+            {`@${userInfo.username}`}
           </Text>
-          <Text>{dataUser.role}</Text>
+          <Text>{userInfo.role}</Text>
         </View>
         <View style={styles.iconBack}>
           <TouchableOpacity

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet, View, Image, TextInput, Alert, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import { Border, FontFamily, FontSize, Color } from "../GlobalStyles";
+import { Border, FontFamily, FontSize, Color } from "../../GlobalStyles";
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,18 +14,19 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
+    console.log(`${config.API_BASE_URL}`)
     try {
       const response = await axios.post(`${config.API_BASE_URL}/auth/login`, {
-        email: email,
+        username: email,
         password: password
       });
 
-      const { user, token } = response.data;
+      const { user, authenticationToken } = response.data;
 
       // Lưu token xuống local storage
-      await AsyncStorage.setItem('token', token);
-      navigation.navigate('Home');
-      console.log('Đăng nhập thành công', "Mời bạn trải nghiệm ứng dụng");
+      await AsyncStorage.setItem('token', authenticationToken);
+      // navigation.navigate('Home');
+      Alert.alert('Đăng nhập thành công', authenticationToken);
 
     } catch (error) {
       console.error(error);
@@ -59,7 +60,7 @@ const Login = () => {
         <Image
           style={[styles.btnsigninIcon, styles.btnsigninPosition]}
           resizeMode="cover"
-          source={require("../assets/btnsignin.png")}
+          source={require("../../asset/btnsignin.png")}
         />
         <LinearGradient
           style={[styles.btnsignin, styles.btnsigninPosition]}
@@ -77,7 +78,7 @@ const Login = () => {
           <Image
             style={styles.icPasswordIcon}
             resizeMode="cover"
-            source={require("../assets/ic-password.png")}
+            source={require("../../asset/ic-password.png")}
           />
           <TextInput
             style={[styles.anatsweet2, styles.bnChaCTypo]}
@@ -92,11 +93,11 @@ const Login = () => {
           <Image
             style={styles.icUserIcon}
             resizeMode="cover"
-            source={require("../assets/ic-user.png")}
+            source={require("../../asset/ic-user.png")}
           />
           <TextInput
             style={[styles.anatsweet, styles.bnChaCTypo]}
-            placeholder="Nhập email"
+            placeholder="Nhập username"
             placeholderTextColor={Color.mediumaquamarine}
             value={email}
             onChangeText={setEmail}
@@ -113,7 +114,7 @@ const Login = () => {
       <Image
         style={styles.healthyFood2Icon}
         resizeMode="cover"
-        source={require("../assets/healthyfood-2.png")}
+        source={require("../../asset/healthyfood-2.png")}
       />
     </LinearGradient>
   );

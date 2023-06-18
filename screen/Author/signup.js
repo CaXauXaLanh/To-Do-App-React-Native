@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet, View, Image, TextInput, Alert, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import { Border, FontFamily, FontSize, Padding, Color } from "../GlobalStyles";
+import { Border, FontFamily, FontSize, Padding, Color } from "../../GlobalStyles";
 import { useNavigation } from '@react-navigation/native';
-import config from '../config'; 
+import config from '../../config'; 
 import axios from 'axios';
 
 const SignUp = () => {
@@ -18,7 +18,6 @@ const SignUp = () => {
         name: username,
         password: password,
         email: email,
-        company_branch: "branch-test",
       };
   
       axios.post(`${config.API_BASE_URL}/auth/register`, userData)
@@ -75,7 +74,7 @@ const SignUp = () => {
           <Image
             style={styles.icPasswordIcon}
             resizeMode="cover"
-            source={require("../assets/ic-password.png")}
+            source={require("../../asset/ic-password.png")}
           />
           <TextInput
             style={[styles.anatsweet3, styles.bnCTypo]}
@@ -90,7 +89,7 @@ const SignUp = () => {
           <Image
             style={styles.icUserIcon}
             resizeMode="cover"
-            source={require("../assets/ic-user.png")}
+            source={require("../../asset/ic-user.png")}
           />
           <TextInput
             style={[styles.anatsweet, styles.bnCTypo]}
@@ -104,7 +103,7 @@ const SignUp = () => {
           <Image
             style={styles.icUserIcon}
             resizeMode="cover"
-            source={require("../assets/mail-1-1.png")}
+            source={require("../../asset/mail-1-1.png")}
           />
           <TextInput
             style={[styles.anatsweet2, styles.bnCTypo]}
@@ -124,7 +123,7 @@ const SignUp = () => {
       <Image
         style={styles.healthyFood2Icon}
         resizeMode="cover"
-        source={require("../assets/healthyfood-2.png")}
+        source={require("../../asset/healthyfood-2.png")}
       />
     </LinearGradient>
   );

@@ -43,7 +43,6 @@ export const CreateBoard = ({navigation}) => {
   const [boardName, setBoardName] = useState('');
 
   const handleChange = value => setBoardName(value);
-  const handleChangeColor = value => setColor(value);
 
   return (
     <View styles={styles.container}>

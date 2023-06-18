@@ -6,10 +6,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  Dimensions,
+  Keyboard,
 } from 'react-native';
+import {Appbar, Menu, Portal, Modal} from 'react-native-paper';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
-  faXmark,
   faUserCircle,
   faList,
   faPaperPlane,
@@ -25,50 +27,87 @@ export const DetailTask = ({route, navigation}) => {
   const [textDesc, setTextDesc] = useState(defaultText);
   const [textCmt, setTextCmt] = useState('');
   const {detail} = route.params;
+  const [openMenu, setOpenMenu] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [header, setHeader] = useState(detail.name);
+  const [edit, setEdit] = useState(false);
+  const windowWidth = Dimensions.get('window').width;
 
   return (
     <>
-      <View style={[styles.header]}>
-        <View style={{borderBottomWidth: 0.5}}>
-          <View style={{margin: 15}}>
-            <View>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.goBack();
-                }}
-                style={{width: 30}}>
-                <FontAwesomeIcon icon={faXmark} size={25} />
-              </TouchableOpacity>
-              <Text style={[styles.headerText, {color: '#000'}]}>
-                {detail.name}
-              </Text>
-              <Text style={{marginTop: 10}}>in list Workspace 1</Text>
-            </View>
-          </View>
-        </View>
-        <View style={{borderBottomWidth: 0.5, borderBottomColor: '#ccc'}}>
-          <View style={{margin: 15}}>
-            <Text style={{fontSize: 16, fontWeight: 500, color: 'black'}}>
-              Quick action
-            </Text>
+      <Portal>
+        <Modal
+          visible={openModal}
+          onDismiss={() => setOpenModal(false)}
+          contentContainerStyle={styles.containerStyle}>
+          <Text style={{fontSize: 18, fontWeight: 500, color: '#161616'}}>
+            Delete Task
+          </Text>
+          <Text style={{marginTop: 10}}>
+            Task will be deleted. There is no undo
+          </Text>
+        </Modal>
+      </Portal>
+      {edit ? (
+        <Appbar.Header mode="large">
+          <Appbar.BackAction onPress={() => setEdit(false)} />
+          <Appbar.Content title={header} />
+          <Appbar.Action
+            icon={'check'}
+            onPress={() => {
+              setEdit(false);
+              Keyboard.dismiss();
+            }}
+          />
+        </Appbar.Header>
+      ) : (
+        <Appbar.Header mode="large">
+          <Appbar.BackAction onPress={() => navigation.goBack()} />
+          <Appbar.Content title={header} />
+          <Appbar.Action
+            icon={'dots-vertical'}
+            onPress={() => setOpenMenu(true)}
+          />
+        </Appbar.Header>
+      )}
+
+      <View>
+        <Menu
+          visible={openMenu}
+          onDismiss={() => setOpenMenu(false)}
+          anchor={{x: windowWidth * 0.95, y: 50}}>
+          <Menu.Item
+            onPress={() => {
+              setOpenModal(true);
+              setOpenMenu(false);
+            }}
+            title="Delete"
+            titleStyle={{color: 'red'}}
+          />
+        </Menu>
+      </View>
+      <View style={{borderBottomWidth: 0.5, borderBottomColor: '#ccc'}}>
+        <View style={{margin: 15}}>
+          <Text style={{fontSize: 16, fontWeight: 500, color: 'black'}}>
+            Quick action
+          </Text>
+          <View style={styles.buttonUser}>
             <TouchableOpacity>
-              <View style={styles.buttonUser}>
-                <View
-                  style={{
-                    padding: 10,
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '100%',
-                  }}>
-                  <FontAwesomeIcon
-                    icon={faUserCircle}
-                    color="#008000"
-                    style={{marginRight: 10}}
-                    size={22}
-                  />
-                  <Text style={{color: '#f2f2f2'}}>Members</Text>
-                </View>
+              <View
+                style={{
+                  padding: 10,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '100%',
+                }}>
+                <FontAwesomeIcon
+                  icon={faUserCircle}
+                  color="#008000"
+                  style={{marginRight: 10}}
+                  size={22}
+                />
+                <Text style={{color: '#f2f2f2'}}>Members</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -100,7 +139,10 @@ export const DetailTask = ({route, navigation}) => {
                     lineHeight: 22,
                   }}
                   value={textDesc}
-                  onChangeText={text => setTextDesc(text)}
+                  onChangeText={text => {
+                    setTextDesc(text);
+                    setEdit(true);
+                  }}
                 />
               </View>
             </View>
@@ -225,4 +267,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     paddingVertical: 5,
   },
+  containerStyle: {backgroundColor: 'white', padding: 20, marginHorizontal: 25},
 });

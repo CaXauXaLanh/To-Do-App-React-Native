@@ -6,6 +6,14 @@ import TabViewContain from '../../components/TabView';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faXmark} from '@fortawesome/free-solid-svg-icons';
 
+const dataUser = {
+  id: 123,
+  name: 'hhtung',
+  email: 'tunghghg@gmail.com',
+  role: 'tester',
+  actived: true,
+};
+
 export const UserDetail = ({navigation}) => {
   const [index, setIndex] = useState(0);
   const handleChangeTabIndex = index => {
@@ -27,9 +35,9 @@ export const UserDetail = ({navigation}) => {
         />
         <View style={styles.displayName}>
           <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-            {'Hoàng Thanh Tùng'}
+            {dataUser.name}
           </Text>
-          <Text>{'@httung'}</Text>
+          <Text>{dataUser.role}</Text>
         </View>
         <View style={styles.iconBack}>
           <TouchableOpacity

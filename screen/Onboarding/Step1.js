@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-export const Step1 = ({navigation}) => {
+export const Step1 = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -29,7 +29,7 @@ export const Step1 = ({navigation}) => {
               Log In
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.signUpButon}>
+          <TouchableOpacity style={styles.signUpButon} onPress={() => navigation.navigate('SignUp')}>
             <Text
               style={{
                 padding: 10,

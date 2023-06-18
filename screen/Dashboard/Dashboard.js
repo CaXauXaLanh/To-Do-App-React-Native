@@ -11,12 +11,13 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {AuthContext} from '../../context/AuthContext';
 import useFetchApi from '../../hooks/useFetchApi';
+import {BASE_URL} from '../../config/config';
 
 const MAX_WIDTH_SCREEN = Dimensions.get('window').width;
 
 export const Dashboard = ({navigation}) => {
-  const {logout, userInfo} = useContext(AuthContext);
-  const {data, loading, fetched} = useFetchApi('/project/', []);
+  const {userInfo} = useContext(AuthContext);
+  const {data, loading, fetched} = useFetchApi(`${BASE_URL}/project/`, []);
 
   return (
     <View style={styles.contain}>

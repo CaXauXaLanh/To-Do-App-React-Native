@@ -9,7 +9,7 @@ export const AuthProvider = ({children}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userToken, setUserToken] = useState('');
   const [userInfo, setUserInfor] = useState({});
-
+  
   const login = async ({username, password}) => {
     try {
       setIsLoading(true);
@@ -26,12 +26,14 @@ export const AuthProvider = ({children}) => {
         },
       );
       const data = resData.data;
+      console.log('aaaaaaaaaaaa');
       setUserInfor({
         username: data.username,
         role: data.role,
       });
       setUserToken(data.authenticationToken);
       AsyncStorage.setItem('userToken', data.authenticationToken);
+      
     } catch (e) {
       console.log(e);
     } finally {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   Text,
   View,
@@ -9,30 +9,16 @@ import {
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
+import {AuthContext} from '../../context/AuthContext';
+import useFetchApi from '../../hooks/useFetchApi';
+import {BASE_URL} from '../../config/config';
 
 const MAX_WIDTH_SCREEN = Dimensions.get('window').width;
 
-const data = [
-  {
-    id: 1,
-    name: 'Workspace 1',
-    image:
-      'https://c0.wallpaperflare.com/preview/107/714/504/interior-office-workspace-computer.jpg',
-  },
-  {
-    id: 2,
-    name: 'Workspace 2',
-    image:
-      'https://previews.123rf.com/images/sripfoto/sripfoto1710/sripfoto171000289/88574931-modern-workspace-with-laptop-tablet-smartphone-and-coffee-cup-copy-space-on-wood-background-top.jpg',
-  },
-  {
-    id: 3,
-    name: 'Workspace 3',
-    image:
-      'https://png.pngtree.com/thumb_back/fh260/background/20230331/pngtree-styled-workspace-with-laptop-photo-image_2188139.jpg',
-  },
-];
 export const Dashboard = ({navigation}) => {
+  const {userInfo} = useContext(AuthContext);
+  const {data, loading, fetched} = useFetchApi(`${BASE_URL}/project/`, []);
+
   return (
     <View style={styles.contain}>
       <View style={styles.headerWorkspace}>
@@ -41,13 +27,17 @@ export const Dashboard = ({navigation}) => {
       <View style={styles.workspaceWrapper}>
         {data.map(item => (
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('Workspace', {image: item.image})
-            }
+            onPress={() => navigation.navigate('Workspace', {image: item.img})}
             style={styles.taskWrapper}
             key={item.id}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Image source={{uri: item.image}} style={styles.imageWorkspace} />
+              <Image
+                source={
+                  item.image ||
+                  require('../../asset/colorBackground/cool-blues.jpg')
+                }
+                style={styles.imageWorkspace}
+              />
               <View style={styles.titleWorkspace}>
                 <Text style={{color: 'rgba(255, 255, 255, 1)'}}>
                   {item.name}
@@ -57,13 +47,15 @@ export const Dashboard = ({navigation}) => {
           </TouchableOpacity>
         ))}
       </View>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('Create Board');
-        }}
-        style={styles.roundButton}>
-        <FontAwesomeIcon icon={faPlus} color={'#fff'} size={20} />
-      </TouchableOpacity>
+      {userInfo.role === 'PM' && (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Create Board');
+          }}
+          style={styles.roundButton}>
+          <FontAwesomeIcon icon={faPlus} color={'#fff'} size={20} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

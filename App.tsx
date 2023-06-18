@@ -6,31 +6,15 @@
  */
 
 import React from 'react';
-import {StyleSheet} from 'react-native';
 
-import {NavigationContainer} from '@react-navigation/native';
-import {DrawerNavigator} from './navigations/DrawerNavigator';
+import {AuthProvider} from './context/AuthContext';
+import {AppNavigator} from './navigations/AppNavigator';
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <DrawerNavigator />
-    </NavigationContainer>
+    <AuthProvider>
+      <AppNavigator />
+    </AuthProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  highlight: {
-    fontWeight: '700',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  content: {
-    padding: 40,
-  },
-  list: {
-    marginTop: 20,
-  },
-});

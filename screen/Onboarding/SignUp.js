@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, View, Image, TextInput, Alert, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, View, Image, TextInput, Alert, TouchableOpacity, ImageBackground } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { Border, FontFamily, FontSize, Padding, Color } from "../../GlobalStyles";
 import { useNavigation } from '@react-navigation/native';
-import config from '../../config'; 
+import config from '../../config/config'; 
 import axios from 'axios';
 
 const SignUp = () => {
@@ -20,11 +20,11 @@ const SignUp = () => {
         email: email,
       };
   
-      axios.post(`${config.API_BASE_URL}/auth/register`, userData)
+      axios.post(`${config.BASE_URL}/auth/register`, userData)
         .then(response => {
           console.log(response);
           Alert.alert('Đăng ký thành công');
-          navigation.navigate('Login');
+          navigation.navigate('LogIn');
         })
         .catch(error => {
           console.log(error);
@@ -36,12 +36,9 @@ const SignUp = () => {
   };
 
   return (
-    <LinearGradient
+    <ImageBackground
       style={styles.signup}
-      locations={[0, 1]}
-      colors={["#f3f9ff", "#daf2ef"]}
-      useAngle={true}
-      angle={169.71}
+      source={require("../../asset/background-auth.jpg")}
     >
       <View style={styles.form}>
         <LinearGradient
@@ -51,7 +48,7 @@ const SignUp = () => {
           useAngle={true}
           angle={94.12}
         >
-          <Text style={[styles.ngNhp, styles.ngNhpTypo]} onPress={() => navigation.navigate('Login')}>ĐĂNG NHẬP</Text>
+          <Text style={[styles.ngNhp, styles.ngNhpTypo]} onPress={() => navigation.navigate('LogIn')}>ĐĂNG NHẬP</Text>
         </LinearGradient>
         <Text style={[styles.bnC, styles.bnCLayout]}>
           Bạn đã có tài khoản rồi?
@@ -114,18 +111,10 @@ const SignUp = () => {
           />
         </View>
         <Text style={[styles.nhpSTn, styles.hinTypo]}>
-          Nhập số tên tài khoản, email và mật khẩu để đăng ký
-        </Text>
-        <Text style={[styles.cngBtU, styles.timeTypo]}>
-          Cùng bắt đầu trải nghiệm ứng dụng
+          Nhập tên tài khoản, email và mật khẩu để đăng ký
         </Text>
       </View>
-      <Image
-        style={styles.healthyFood2Icon}
-        resizeMode="cover"
-        source={require("../../asset/healthyfood-2.png")}
-      />
-    </LinearGradient>
+    </ImageBackground>
   );
 };
 
@@ -192,7 +181,7 @@ const styles = StyleSheet.create({
   bnC: {
     top: 467,
     left: 69,
-    color: Color.gray,
+    color: "#ffff",
     fontFamily: FontFamily.sFProRegular,
     fontSize: FontSize.size_base,
     position: "absolute",
@@ -287,7 +276,7 @@ const styles = StyleSheet.create({
   },
   nhpSTn: {
     top: 86,
-    color: Color.darkgray,
+    color: "#ffff",
     width: 318,
     left: 1,
     lineHeight: 22,

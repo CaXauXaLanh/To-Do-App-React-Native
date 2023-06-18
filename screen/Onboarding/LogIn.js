@@ -1,46 +1,36 @@
-import React, { useState } from 'react';
-import { Text, StyleSheet, View, Image, TextInput, Alert, TouchableOpacity } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
-import { Border, FontFamily, FontSize, Color } from "../../GlobalStyles";
+import React, { useState, useContext } from 'react';
+import { View, Text, StyleSheet, Keyboard, Button, ImageBackground, Image, TouchableOpacity, Alert } from 'react-native';
+import {
+  TextInput,
+  TouchableWithoutFeedback,
+} from 'react-native-gesture-handler';
+import { AuthContext } from '../../context/AuthContext';
+import { Border, Color, FontFamily, FontSize } from '../../GlobalStyles';
+import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import config from '../../config'; // Đường dẫn đến file config.js
 
-const Login = () => {
-  const navigation = useNavigation();
-  const [email, setEmail] = useState('');
+export const LogIn = () => {
+  const { login } = useContext(AuthContext);
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const navigation = useNavigation();
 
-  const handleLogin = async () => {
-    console.log(`${config.API_BASE_URL}`)
-    try {
-      const response = await axios.post(`${config.API_BASE_URL}/auth/login`, {
-        username: email,
-        password: password
-      });
-
-      const { user, authenticationToken } = response.data;
-
-      // Lưu token xuống local storage
-      await AsyncStorage.setItem('token', authenticationToken);
-      // navigation.navigate('Home');
-      Alert.alert('Đăng nhập thành công', authenticationToken);
-
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Đăng nhập không thành công', 'Vui lòng kiểm tra lại email và mật khẩu.');
+  const handleLogin = () => {
+    if (username && password) {
+      const userData = {
+        username: username,
+        password: password,
+      };
+      login(userData)
+    } else {
+      Alert.alert('Đăng nhập thất bại', 'Vui lòng nhập đầy đủ thông tin');
     }
   };
-
   return (
-    <LinearGradient
+    <ImageBackground
       style={styles.login}
-      locations={[0, 1]}
-      colors={["#f3f9ff", "#daf2ef"]}
-      useAngle={true}
-      angle={169.71}
+      source={require("../../asset/background-auth.jpg")}
     >
       <View style={styles.form}>
         <LinearGradient
@@ -99,27 +89,20 @@ const Login = () => {
             style={[styles.anatsweet, styles.bnChaCTypo]}
             placeholder="Nhập username"
             placeholderTextColor={Color.mediumaquamarine}
-            value={email}
-            onChangeText={setEmail}
+            value={username}
+            onChangeText={setUsername}
           />
         </View>
         <Text style={[styles.nhpSTn, styles.hinTypo]}>
-          Nhập số tên tài khoản và mật khẩu để đăng nhập
+          Nhập tên tài khoản và mật khẩu để đăng nhập
         </Text>
         <Text style={[styles.choMngTr, styles.timeTypo]}>
           Chào mừng trở lại
         </Text>
       </View>
-
-      <Image
-        style={styles.healthyFood2Icon}
-        resizeMode="cover"
-        source={require("../../asset/healthyfood-2.png")}
-      />
-    </LinearGradient>
+    </ImageBackground>
   );
 };
-
 const styles = StyleSheet.create({
   btnsigninFlexBox: {
     justifyContent: "center",
@@ -186,7 +169,7 @@ const styles = StyleSheet.create({
   bnChaC: {
     top: 419,
     left: 73,
-    color: "rgba(0, 0, 0, 0.5)",
+    color: "#ffff",
     fontFamily: FontFamily.sFProRegular,
     fontSize: FontSize.size_base,
     position: "absolute",
@@ -200,7 +183,7 @@ const styles = StyleSheet.create({
   },
   btnsignin: {
     left: 78,
-    width: 241,
+    width: 240,
     paddingHorizontal: 72,
     paddingVertical: 0,
     alignItems: "flex-end",
@@ -275,7 +258,7 @@ const styles = StyleSheet.create({
   nhpSTn: {
     top: 44,
     left: 26,
-    color: "#97b6bd",
+    color: "#ffff",
     width: 267,
     lineHeight: 22,
     textAlign: "center",
@@ -284,7 +267,7 @@ const styles = StyleSheet.create({
     left: 43,
     fontSize: 28,
     fontFamily: FontFamily.sFProSemibold,
-    color: "#2e5254",
+    color: "#ffff",
     width: 234,
     top: 0,
   },
@@ -381,4 +364,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;

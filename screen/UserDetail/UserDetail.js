@@ -7,14 +7,6 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faXmark} from '@fortawesome/free-solid-svg-icons';
 import {AuthContext} from '../../context/AuthContext';
 
-const dataUser = {
-  id: 123,
-  name: 'hhtung',
-  email: 'tunghghg@gmail.com',
-  role: 'tester',
-  actived: true,
-};
-
 export const UserDetail = ({navigation}) => {
   const {userInfo} = useContext(AuthContext);
   const [index, setIndex] = useState(0);

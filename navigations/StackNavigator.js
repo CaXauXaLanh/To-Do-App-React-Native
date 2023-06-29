@@ -65,7 +65,11 @@ export const MainStackNavigator = ({navigation}) => {
           header: () => header,
         }}
       />
-      <Stack.Screen name="Workspace" component={Workspace} />
+      <Stack.Screen
+        name="Workspace"
+        component={Workspace}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name={'Detail'}
         component={DetailTask}

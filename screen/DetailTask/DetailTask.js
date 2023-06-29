@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
   ScrollView,
@@ -8,30 +8,100 @@ import {
   Image,
   Dimensions,
   Keyboard,
+  FlatList,
+  RefreshControl,
 } from 'react-native';
 import {Appbar, Menu, Portal, Modal} from 'react-native-paper';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
-  faUserCircle,
   faList,
   faPaperPlane,
-  faUser,
+  faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
+import {AvatarText} from '../../components/Avatar';
 import {TextInput} from 'react-native-gesture-handler';
 import {Comment} from '../../components/Comment';
-
-const defaultText =
-  'This is text Description with 4 lines\nThis is text Description with 4 lines\nThis is text Description with 4 lines\nThis is text Description with 4 lines\n';
+import {CommentSkeleton} from '../../components/CommentSkeleton';
+import useFetchApi from '../../hooks/useFetchApi';
+import {AuthContext} from '../../context/AuthContext';
+import apiInstance from '../../constants/apiInstance';
 
 export const DetailTask = ({route, navigation}) => {
-  const [textDesc, setTextDesc] = useState(defaultText);
+  const {detail, handleReload} = route.params;
+  const {userInfo} = useContext(AuthContext);
+  const {
+    data: comments,
+    loading,
+    setLoading,
+    fetched,
+    refetch,
+  } = useFetchApi(`/comment/${detail.id}`);
+  const [textDesc, setTextDesc] = useState(detail.description);
   const [textCmt, setTextCmt] = useState('');
-  const {detail} = route.params;
   const [openMenu, setOpenMenu] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [header, setHeader] = useState(detail.name);
   const [edit, setEdit] = useState(false);
+  const [visibleStatusSelect, setVisibleStatusSelect] = useState(false);
   const windowWidth = Dimensions.get('window').width;
+  const [refreshing, setRefreshing] = useState(false);
+  const handleChaneStatus = async status => {
+    try {
+      setLoading(true);
+      await apiInstance.put('task/change-status', {
+        status: status,
+        id: detail.id,
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const onRefresh = () => {
+    try {
+      setRefreshing(true);
+      refetch(`/comment/${detail.id}`);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+  const handleSubmitComment = async () => {
+    try {
+      setLoading(true);
+      await apiInstance.post(`/comment`, {
+        content: textCmt,
+        taskID: detail.id,
+        employeeId: userInfo.id,
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+      setTextCmt('');
+    }
+  };
+
+  const valueSelect = [
+    {
+      label: 'To do',
+      value: 'todo',
+    },
+    {
+      label: 'Doing',
+      value: 'doing',
+    },
+    {
+      label: 'Waiting Review',
+      value: 'waiting-review',
+    },
+    {
+      label: 'Done',
+      value: 'done',
+    },
+  ];
 
   return (
     <>
@@ -52,22 +122,26 @@ export const DetailTask = ({route, navigation}) => {
         <Appbar.Header mode="large">
           <Appbar.BackAction onPress={() => setEdit(false)} />
           <Appbar.Content title={header} />
-          <Appbar.Action
-            icon={'check'}
-            onPress={() => {
-              setEdit(false);
-              Keyboard.dismiss();
-            }}
-          />
+          {userInfo.role?.toLowerCase() === 'pm' && (
+            <Appbar.Action
+              icon={'check'}
+              onPress={() => {
+                setEdit(false);
+                Keyboard.dismiss();
+              }}
+            />
+          )}
         </Appbar.Header>
       ) : (
         <Appbar.Header mode="large">
           <Appbar.BackAction onPress={() => navigation.goBack()} />
           <Appbar.Content title={header} />
-          <Appbar.Action
-            icon={'dots-vertical'}
-            onPress={() => setOpenMenu(true)}
-          />
+          {userInfo.role?.toLowerCase() === 'pm' && (
+            <Appbar.Action
+              icon={'dots-vertical'}
+              onPress={() => setOpenMenu(true)}
+            />
+          )}
         </Appbar.Header>
       )}
 
@@ -86,34 +160,10 @@ export const DetailTask = ({route, navigation}) => {
           />
         </Menu>
       </View>
-      <View style={{borderBottomWidth: 0.5, borderBottomColor: '#ccc'}}>
-        <View style={{margin: 15}}>
-          <Text style={{fontSize: 16, fontWeight: 500, color: 'black'}}>
-            Quick action
-          </Text>
-          <View style={styles.buttonUser}>
-            <TouchableOpacity>
-              <View
-                style={{
-                  padding: 10,
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  height: '100%',
-                }}>
-                <FontAwesomeIcon
-                  icon={faUserCircle}
-                  color="#008000"
-                  style={{marginRight: 10}}
-                  size={22}
-                />
-                <Text style={{color: '#f2f2f2'}}>Members</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View style={styles.container}>
           <View style={styles.content}>
             <View style={{margin: 15}}>
@@ -147,31 +197,115 @@ export const DetailTask = ({route, navigation}) => {
               </View>
             </View>
           </View>
-          <View style={styles.memberContain}>
-            <View style={styles.memberList}>
-              <FontAwesomeIcon icon={faUser} style={{marginRight: 10}} />
-              {detail.members.length > 0 ? (
-                detail.members.map(image => (
-                  <Image
-                    source={{uri: image}}
-                    style={{height: 40, width: 40, borderRadius: 30}}
-                  />
-                ))
-              ) : (
-                <Text style={{color: '#262626'}}>Member</Text>
-              )}
+          <View style={styles.statusContainer}>
+            <View
+              style={{
+                marginHorizontal: 15,
+                flex: 1,
+                height: 220,
+              }}>
+              <Text
+                style={{
+                  fontSize: 24,
+                  fontWeight: 'bold',
+                  marginTop: 10,
+                  color: '#2f2f1e',
+                  borderBottomWidth: 0.5,
+                }}>
+                Status
+              </Text>
+              <View>
+                <View
+                  style={{
+                    margin: 15,
+                    marginBottom: 0,
+                    borderColor: '#ccc',
+                    borderWidth: 1,
+                    width: 200,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => setVisibleStatusSelect(prev => !prev)}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: 10,
+                      }}>
+                      <Text style={{fontSize: 16, color: '#2f2f1e'}}>
+                        {
+                          valueSelect.find(
+                            select => select.value === detail.status,
+                          ).label
+                        }
+                      </Text>
+                      <FontAwesomeIcon icon={faChevronDown} size={18} />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                {visibleStatusSelect && (
+                  <View style={{width: 200, marginLeft: 15}}>
+                    <TouchableOpacity
+                      style={{borderWidth: 1}}
+                      onPress={async () => {
+                        await handleChaneStatus('todo');
+                        handleReload();
+                        navigation.goBack();
+                      }}>
+                      <Text style={styles.textStatus}>Todo</Text>
+                    </TouchableOpacity>
+
+                    {userInfo.role?.toLowerCase() === 'tester' && (
+                      <>
+                        <TouchableOpacity
+                          style={{borderWidth: 1}}
+                          onPress={async () => {
+                            await handleChaneStatus('doing');
+                            handleReload();
+                            navigation.goBack();
+                          }}>
+                          <Text style={styles.textStatus}>Doing</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={{borderWidth: 1}}
+                          onPress={async () => {
+                            await handleChaneStatus('waiting-review');
+                            handleReload();
+                            navigation.goBack();
+                          }}>
+                          <Text style={styles.textStatus}>Waiting Review</Text>
+                        </TouchableOpacity>
+                      </>
+                    )}
+
+                    {userInfo.role?.toLowerCase() === 'pm' && (
+                      <TouchableOpacity
+                        style={{borderWidth: 1}}
+                        onPress={async () => {
+                          await handleChaneStatus('done');
+                          handleReload();
+                          navigation.goBack();
+                        }}>
+                        <Text style={styles.textStatus}>Done</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                )}
+              </View>
             </View>
           </View>
-          <Comment dataComment={detail.comments} />
+          {loading && !fetched ? (
+            <CommentSkeleton />
+          ) : (
+            <Comment dataComment={comments} />
+          )}
         </View>
       </ScrollView>
       <View style={styles.footer}>
-        <Image
-          source={require('../../asset/avatar.jpg')}
-          style={styles.avatar}
-        />
+        <AvatarText role={userInfo.role} />
         <View style={styles.inputContain}>
           <TextInput
+            disabled={loading}
             editable
             style={{
               flex: 1,
@@ -186,7 +320,12 @@ export const DetailTask = ({route, navigation}) => {
             underlineColorAndroid="transparent"
             placeholder="Add comment"
           />
-          <TouchableOpacity disabled={!textCmt.trim()}>
+          <TouchableOpacity
+            disabled={!textCmt.trim() || loading}
+            onPress={async () => {
+              await handleSubmitComment();
+              onRefresh();
+            }}>
             <FontAwesomeIcon
               icon={faPaperPlane}
               style={{padding: 10, margin: 10}}
@@ -257,7 +396,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderColor: '#ccc',
   },
-  memberContain: {
+  statusContainer: {
     marginTop: 15,
     backgroundColor: '#fff',
   },
@@ -268,4 +407,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   containerStyle: {backgroundColor: 'white', padding: 20, marginHorizontal: 25},
+  textStatus: {
+    fontSize: 16,
+    color: '#2f2f1e',
+    padding: 5,
+  },
 });

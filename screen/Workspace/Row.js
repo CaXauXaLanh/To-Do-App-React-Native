@@ -1,27 +1,17 @@
 import React from 'react';
 
-export const Row = ({item, navigation}) => {
+export const Row = ({item, navigation, handleReload}) => {
   return (
     <View style={{padding: 3}}>
       <TouchableOpacity
         style={styles.card}
         onPress={() => {
-          navigation.navigate('Detail', {detail: item});
+          navigation.navigate('Detail', {
+            detail: item,
+            handleReload: handleReload,
+          });
         }}>
         <Text style={{fontWeight: '500'}}>{item.name}</Text>
-        <View style={styles.memberContainer}>
-          {item.members.map(img => (
-            <Image
-              source={{uri: img}}
-              style={{
-                width: 35,
-                height: 35,
-                borderRadius: 30,
-                marginHorizontal: 2,
-              }}
-            />
-          ))}
-        </View>
       </TouchableOpacity>
     </View>
   );
@@ -38,7 +28,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 8,
     marginBottom: 5,
-    width: 240,
+    width: '100%',
     minHeight: 50,
     //shadow
     shadowColor: '#000',

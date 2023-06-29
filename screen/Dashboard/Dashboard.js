@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   Text,
   View,
@@ -6,56 +6,100 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  ScrollView,
+  RefreshControl,
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {AuthContext} from '../../context/AuthContext';
 import useFetchApi from '../../hooks/useFetchApi';
+import {DashboardSkeleton} from '../../components/DashboardSkeleton';
 
 const MAX_WIDTH_SCREEN = Dimensions.get('window').width;
 
 export const Dashboard = ({navigation}) => {
-  const {logout, userInfo} = useContext(AuthContext);
-  const {data, loading, fetched} = useFetchApi('/project/', []);
+  const {userInfo} = useContext(AuthContext);
+  const [refreshing, setRefreshing] = useState(false);
+  const {data, loading, fetched, refetch, setLoading} = useFetchApi(
+    `/project/${userInfo.id}`,
+    [],
+  );
+
+  const onRefresh = () => {
+    try {
+      setRefreshing(true);
+      refetch(`/project/${userInfo.id}`);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   return (
-    <View style={styles.contain}>
-      <View style={styles.headerWorkspace}>
-        <Text style={styles.text}>TABLE</Text>
-      </View>
-      <View style={styles.workspaceWrapper}>
-        {data.map(item => (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Workspace', {image: item.img})}
-            style={styles.taskWrapper}
-            key={item.id}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Image
-                source={
-                  item.image ||
-                  require('../../asset/colorBackground/cool-blues.jpg')
-                }
-                style={styles.imageWorkspace}
-              />
-              <View style={styles.titleWorkspace}>
-                <Text style={{color: 'rgba(255, 255, 255, 1)'}}>
-                  {item.name}
-                </Text>
-              </View>
+    <>
+      <ScrollView
+        style={styles.contain}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        <View style={styles.headerWorkspace}>
+          <Text style={styles.text}>TABLE</Text>
+        </View>
+        {loading && !fetched ? (
+          <DashboardSkeleton />
+        ) : (
+          <>
+            <View style={styles.workspaceWrapper}>
+              {data.map(item => (
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('Workspace', {
+                      image:
+                        item.img ||
+                        require('../../asset/colorBackground/cool-blues.jpg'),
+                      projectId: item.id,
+                      title: item.name,
+                    })
+                  }
+                  style={styles.taskWrapper}
+                  key={item.id}>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Image
+                      source={
+                        item.img ||
+                        require('../../asset/colorBackground/cool-blues.jpg')
+                      }
+                      style={styles.imageWorkspace}
+                    />
+                    <View style={styles.titleWorkspace}>
+                      <TouchableOpacity>
+                        <Text style={{color: 'rgba(255, 255, 255, 1)'}}>
+                          {item.name}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              ))}
             </View>
-          </TouchableOpacity>
-        ))}
-      </View>
-      {userInfo.role === 'PM' && (
+          </>
+        )}
+      </ScrollView>
+      {userInfo.role?.toLowerCase() === 'pm' && (
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Create Board');
+            navigation.navigate('Create Board', {
+              loading: loading,
+              setLoading: setLoading,
+              handleReload: onRefresh,
+            });
           }}
           style={styles.roundButton}>
           <FontAwesomeIcon icon={faPlus} color={'#fff'} size={20} />
         </TouchableOpacity>
       )}
-    </View>
+    </>
   );
 };
 
@@ -116,5 +160,6 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 100,
     backgroundColor: '#007500',
+    position: 'absolute',
   },
 });

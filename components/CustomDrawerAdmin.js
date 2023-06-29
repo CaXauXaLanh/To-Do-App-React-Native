@@ -8,12 +8,11 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faSignOut} from '@fortawesome/free-solid-svg-icons';
 import {AuthContext} from '../context/AuthContext';
 
-export const CustomDrawer = props => {
+export const CustomDrawerAdmin = props => {
   const {logout, userInfo} = useContext(AuthContext);
   return (
     <View style={{flex: 1}}>
       <DrawerContentScrollView
-        {...props}
         contentContainerStyle={{backgroundColor: '#0C66E4'}}>
         <ImageBackground
           source={{uri: 'https://www.colorhexa.com/0c66e4.png'}}

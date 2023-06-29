@@ -9,46 +9,36 @@ export const AuthProvider = ({children}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userToken, setUserToken] = useState('');
   const [userInfo, setUserInfor] = useState({});
-
-  const login = async ({username, password}) => {
-    try {
-      setIsLoading(true);
-      const resData = await axios.post(
-        `${BASE_URL}/auth/login`,
-        {
-          username: username,
-          password: password,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-      const data = resData.data;
-      setUserInfor({
-        username: data.username,
-        role: data.role,
-      });
-      setUserToken(data.authenticationToken);
-      AsyncStorage.setItem('userToken', data.authenticationToken);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const [secretKey, setSecretKey] = useState('');
+  const [error, setError] = useState('');
+  const apiInstance = axios.create({
+    baseURL: `${BASE_URL}`,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer' + ' ' + userToken,
+    },
+  });
 
   const logout = () => {
     setUserToken(null);
+    AsyncStorage.removeItem('userInfo');
     AsyncStorage.removeItem('userToken');
   };
 
   const isLoggedIn = async () => {
     try {
       setIsLoading(true);
-      const userTokenStorage = await AsyncStorage.getItem('userToken');
-      setUserToken(userTokenStorage);
+      let userTokenStorage = await AsyncStorage.getItem('userToken');
+      let userInfoStorage = await AsyncStorage.getItem('userInfo');
+      userInfoStorage = JSON.parse(userInfoStorage);
+      if (userInfoStorage) {
+        setUserToken(userTokenStorage);
+        setUserInfor({
+          username: userInfoStorage.username,
+          role: userInfoStorage.role,
+          id: userInfoStorage.userId,
+        });
+      }
     } catch (e) {
       console.error(`Logged in fail in ${e}`);
     } finally {
@@ -62,7 +52,19 @@ export const AuthProvider = ({children}) => {
 
   return (
     <AuthContext.Provider
-      value={{login, logout, isLoading, userToken, setIsLoading, userInfo}}>
+      value={{
+        logout,
+        isLoading,
+        userToken,
+        setIsLoading,
+        userInfo,
+        secretKey,
+        setSecretKey,
+        error,
+        setUserInfor,
+        setUserToken,
+        apiInstance,
+      }}>
       {children}
     </AuthContext.Provider>
   );

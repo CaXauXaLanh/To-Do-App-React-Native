@@ -1,18 +1,19 @@
 import React from 'react';
 
 import {Image, View, Text, StyleSheet} from 'react-native';
+import {AvatarText} from './Avatar';
 
 export const Comment = ({dataComment}) => {
   return (
     <View style={styles.commentListContain}>
       {dataComment.map(comment => (
         <View style={styles.commentContain}>
-          <Image source={{uri: comment.image}} style={styles.avatar} />
+          <AvatarText role={comment.role} />
           <View style={{marginLeft: 10}}>
             <Text style={{fontSize: 15, fontWeight: 500, color: '#1a1a1a'}}>
-              {comment.name}
+              {comment.employeeName}
             </Text>
-            <Text style={styles.comment}>{comment.text}</Text>
+            <Text style={styles.comment}>{comment.content}</Text>
           </View>
         </View>
       ))}
@@ -35,12 +36,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
     marginTop: 30,
+    maxWidth: '90%',
   },
   comment: {
     padding: 10,
     backgroundColor: '#fff',
     borderRadius: 10,
-    maxWidth: '85%',
+    maxWidth: '100%',
     paddingTop: 5,
     paddingBottom: 5,
     marginTop: 5,

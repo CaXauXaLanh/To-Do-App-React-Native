@@ -5,6 +5,8 @@ import UserDetail from '../screen/UserDetail';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {CustomDrawer} from '../components/CustomDrawer';
 import {faHouse, faUser} from '@fortawesome/free-solid-svg-icons';
+import {CustomDrawerAdmin} from '../components/CustomDrawerAdmin';
+import {AdminNavigator} from './AdminNavigator';
 
 const Drawer = createDrawerNavigator();
 export const DrawerNavigator = () => {
@@ -30,6 +32,16 @@ export const DrawerNavigator = () => {
           ),
         }}
       />
+    </Drawer.Navigator>
+  );
+};
+
+export const DrawerAdminNavigator = () => {
+  return (
+    <Drawer.Navigator
+      screenOptions={{headerShown: false}}
+      drawerContent={props => <CustomDrawerAdmin {...props} />}>
+      <Drawer.Screen name="Management" component={AdminNavigator} />
     </Drawer.Navigator>
   );
 };

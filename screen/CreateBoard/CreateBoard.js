@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,8 @@ import {
   LogBox,
   Button,
 } from 'react-native';
+import apiInstance from '../../constants/apiInstance';
+import {AuthContext} from '../../context/AuthContext';
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
@@ -36,11 +38,28 @@ const colorValue = [
     value: require('../../asset/colorBackground/vanusa.jpg'),
   },
 ];
-export const CreateBoard = ({navigation}) => {
+export const CreateBoard = ({navigation, route}) => {
   const [color, setColor] = useState(
     require('../../asset/colorBackground/cool-blues.jpg'),
   );
   const [boardName, setBoardName] = useState('');
+  const {loading, setLoading, handleReload} = route.params;
+  const {userInfo} = useContext(AuthContext);
+
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      const resp = await apiInstance.post('/project/create', {
+        name: boardName,
+        img: color,
+        employeeId: userInfo.id,
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleChange = value => setBoardName(value);
 
@@ -87,7 +106,12 @@ export const CreateBoard = ({navigation}) => {
               height: 40,
               borderRadius: 5,
             }}
-            disabled={!boardName.trim()}>
+            disabled={!boardName.trim() || loading}
+            onPress={() => {
+              handleSubmit();
+              // navigation.goBack();
+              // handleReload();
+            }}>
             <Text
               style={{fontWeight: 500, color: boardName.trim() ? '#fff' : ''}}>
               CREATE BOARD

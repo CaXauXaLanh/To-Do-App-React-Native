@@ -11,12 +11,16 @@ import {
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faEye} from '@fortawesome/free-solid-svg-icons';
+import apiInstance from '../../constants/apiInstance';
+import {Loader} from '../Loader';
 
 export default function TabViewSettings() {
   const [open, setOpen] = useState(false);
   const handleChangeOpen = () => {
     setOpen(prevState => !prevState);
   };
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const [focusOldPassword, setFocusOldPassword] = useState(false);
   const [focusNewPassword, setFocusNewPassword] = useState(false);
@@ -30,188 +34,244 @@ export default function TabViewSettings() {
   const [hideNewPass, setHideNewPass] = useState(true);
   const [hideRetypePass, setHideRetypePass] = useState(true);
 
+  const validate = () => {
+    let valid = true;
+    if (!valueOldPass.trim()) {
+      handleError('error', 'oldpass');
+      valid = false;
+    } else handleError('', 'oldpass');
+    if (!valueNewPass.trim()) {
+      handleError('error', 'newpass');
+      valid = false;
+    } else handleError('', 'newpass');
+    if (!valueRetypePass.trim()) {
+      handleError('error', 'retype');
+      valid = false;
+    } else handleError('', 'retype');
+    if (valueRetypePass !== valueNewPass) {
+      handleError('error', 'retype');
+      valid = false;
+    } else handleError('', 'retype');
+
+    if (valid) {
+      handleSubmit();
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      await apiInstance.put('/auth/password/change', {
+        password: valueOldPass,
+        newpass: valueNewPass,
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleError = (errorMessage, input) => {
+    setErrors(prev => ({...prev, [input]: errorMessage}));
+  };
+
   return (
-    <TabView.Item style={styles.tabViewContainer}>
-      <ScrollView>
-        <View>
-          <View
-            style={{
-              flexDirection: 'row',
-              backgroundColor: '#e6e6e6',
-              alignItems: 'center',
-              padding: 15,
-              borderRadius: 6,
-            }}>
-            <Text style={{fontWeight: 500, fontSize: 16}}>Account setting</Text>
-          </View>
+    <>
+      <Loader visible={loading} />
+      <TabView.Item style={styles.tabViewContainer}>
+        <ScrollView>
           <View>
             <View
               style={{
-                alignItems: 'center',
-                width: 135,
-                margin: 15,
                 flexDirection: 'row',
-                justifyContent: 'center',
-                borderRadius: 10,
+                backgroundColor: '#e6e6e6',
+                alignItems: 'center',
+                padding: 15,
+                borderRadius: 6,
               }}>
-              <TouchableOpacity onPress={handleChangeOpen}>
-                <Text
-                  style={{
-                    backgroundColor: '#e6e6e6',
-                    width: '100%',
-                    padding: 10,
-                    borderWidth: 1,
-                    borderRadius: 6,
-                  }}>
-                  Change password
-                </Text>
-              </TouchableOpacity>
+              <Text style={{fontWeight: 500, fontSize: 16}}>
+                Account setting
+              </Text>
             </View>
-            {open && (
-              <View style={styles.changePassContain}>
-                <View style={styles.headerAndInput}>
-                  <Text style={{fontSize: 16, fontWeight: 500, color: '#333'}}>
-                    Old password
+            <View>
+              <View
+                style={{
+                  alignItems: 'center',
+                  width: 135,
+                  margin: 15,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  borderRadius: 10,
+                }}>
+                <TouchableOpacity onPress={handleChangeOpen}>
+                  <Text
+                    style={{
+                      backgroundColor: '#e6e6e6',
+                      width: '100%',
+                      padding: 10,
+                      borderWidth: 1,
+                      borderRadius: 6,
+                    }}>
+                    Change password
                   </Text>
-                  <View
-                    style={[
-                      styles.inputContain,
-                      {borderColor: focusOldPassword ? '#0C66E4' : '#ccc'},
-                    ]}>
-                    <TextInput
-                      editable
-                      style={{
-                        flex: 1,
-                        height: 45,
-                        textAlignVertical: 'center',
-                        paddingLeft: 15,
-                        fontSize: 16,
-                        borderWidth: 0,
-                      }}
-                      secureTextEntry={hideOldPass}
-                      value={valueOldPass}
-                      onChangeText={text => setValueOldPass(text)}
-                      onFocus={() => {
-                        setFocusOldPassword(true);
-                      }}
-                      onBlur={() => {
-                        setFocusOldPassword(false);
-                      }}
-                      underlineColorAndroid="transparent"
-                    />
-                    <TouchableOpacity
-                      onPressIn={() => {
-                        setHideOldPass(false);
-                      }}
-                      onPressOut={() => {
-                        setHideOldPass(true);
-                      }}>
-                      <FontAwesomeIcon
-                        icon={faEye}
-                        style={{padding: 10, margin: 10}}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                {/*Old password*/}
-                <View style={styles.headerAndInput}>
-                  <Text style={{fontSize: 16, fontWeight: 500, color: '#333'}}>
-                    New password
-                  </Text>
-                  <View
-                    style={[
-                      styles.inputContain,
-                      {borderColor: focusNewPassword ? '#0C66E4' : '#ccc'},
-                    ]}>
-                    <TextInput
-                      editable
-                      style={{
-                        flex: 1,
-                        height: 45,
-                        textAlignVertical: 'center',
-                        paddingLeft: 15,
-                        fontSize: 16,
-                        borderWidth: 0,
-                      }}
-                      secureTextEntry={hideNewPass}
-                      value={valueNewPass}
-                      onChangeText={text => setValueNewPass(text)}
-                      onFocus={() => {
-                        setFocusNewPassword(true);
-                      }}
-                      onBlur={() => {
-                        setFocusNewPassword(false);
-                      }}
-                      underlineColorAndroid="transparent"
-                    />
-                    <TouchableOpacity
-                      onPressIn={() => {
-                        setHideNewPass(false);
-                      }}
-                      onPressOut={() => {
-                        setHideNewPass(true);
-                      }}>
-                      <FontAwesomeIcon
-                        icon={faEye}
-                        style={{padding: 10, margin: 10}}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                {/*New password*/}
-                <View style={styles.headerAndInput}>
-                  <Text style={{fontSize: 16, fontWeight: 500, color: '#333'}}>
-                    Retype password
-                  </Text>
-                  <View
-                    style={[
-                      styles.inputContain,
-                      {borderColor: focusRetypePassword ? '#0C66E4' : '#ccc'},
-                    ]}>
-                    <TextInput
-                      editable
-                      style={{
-                        flex: 1,
-                        height: 45,
-                        textAlignVertical: 'center',
-                        paddingLeft: 15,
-                        fontSize: 16,
-                        borderWidth: 0,
-                      }}
-                      secureTextEntry={hideRetypePass}
-                      value={valueRetypePass}
-                      onChangeText={text => setValueRetypePass(text)}
-                      onFocus={() => {
-                        setFocusRetypePassword(true);
-                      }}
-                      onBlur={() => {
-                        setFocusRetypePassword(false);
-                      }}
-                      underlineColorAndroid="transparent"
-                    />
-                    <TouchableOpacity
-                      onPressIn={() => {
-                        setHideRetypePass(false);
-                      }}
-                      onPressOut={() => {
-                        setHideRetypePass(true);
-                      }}>
-                      <FontAwesomeIcon
-                        icon={faEye}
-                        style={{padding: 10, margin: 10}}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <View style={{marginTop: 30}}>
-                  <Button title={'Save'} />
-                </View>
+                </TouchableOpacity>
               </View>
-            )}
+              {open && (
+                <View style={styles.changePassContain}>
+                  <View style={styles.headerAndInput}>
+                    <Text
+                      style={{fontSize: 16, fontWeight: 500, color: '#333'}}>
+                      Old password
+                    </Text>
+                    <View
+                      style={[
+                        styles.inputContain,
+                        {borderColor: focusOldPassword ? '#0C66E4' : '#ccc'},
+                      ]}>
+                      <TextInput
+                        editable
+                        style={{
+                          flex: 1,
+                          height: 45,
+                          textAlignVertical: 'center',
+                          paddingLeft: 15,
+                          fontSize: 16,
+                          borderWidth: 0,
+                        }}
+                        secureTextEntry={hideOldPass}
+                        value={valueOldPass}
+                        onChangeText={text => setValueOldPass(text)}
+                        onFocus={() => {
+                          setFocusOldPassword(true);
+                        }}
+                        onBlur={() => {
+                          setFocusOldPassword(false);
+                        }}
+                        underlineColorAndroid="transparent"
+                      />
+                      <TouchableOpacity
+                        onPressIn={() => {
+                          setHideOldPass(false);
+                        }}
+                        onPressOut={() => {
+                          setHideOldPass(true);
+                        }}>
+                        <FontAwesomeIcon
+                          icon={faEye}
+                          style={{padding: 10, margin: 10}}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  {/*Old password*/}
+                  <View style={styles.headerAndInput}>
+                    <Text
+                      style={{fontSize: 16, fontWeight: 500, color: '#333'}}>
+                      New password
+                    </Text>
+                    <View
+                      style={[
+                        styles.inputContain,
+                        {
+                          borderColor: focusNewPassword
+                            ? '#0C66E4'
+                            : errors.newpass
+                            ? '#ff0000'
+                            : '#ccc',
+                        },
+                      ]}>
+                      <TextInput
+                        editable
+                        style={{
+                          flex: 1,
+                          height: 45,
+                          textAlignVertical: 'center',
+                          paddingLeft: 15,
+                          fontSize: 16,
+                          borderWidth: 0,
+                        }}
+                        secureTextEntry={hideNewPass}
+                        value={valueNewPass}
+                        onChangeText={text => setValueNewPass(text)}
+                        onFocus={() => {
+                          setFocusNewPassword(true);
+                        }}
+                        onBlur={() => {
+                          setFocusNewPassword(false);
+                        }}
+                        underlineColorAndroid="transparent"
+                      />
+                      <TouchableOpacity
+                        onPressIn={() => {
+                          setHideNewPass(false);
+                        }}
+                        onPressOut={() => {
+                          setHideNewPass(true);
+                        }}>
+                        <FontAwesomeIcon
+                          icon={faEye}
+                          style={{padding: 10, margin: 10}}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  {/*New password*/}
+                  <View style={styles.headerAndInput}>
+                    <Text
+                      style={{fontSize: 16, fontWeight: 500, color: '#333'}}>
+                      Retype password
+                    </Text>
+                    <View
+                      style={[
+                        styles.inputContain,
+                        {borderColor: focusRetypePassword ? '#0C66E4' : '#ccc'},
+                      ]}>
+                      <TextInput
+                        editable
+                        style={{
+                          flex: 1,
+                          height: 45,
+                          textAlignVertical: 'center',
+                          paddingLeft: 15,
+                          fontSize: 16,
+                          borderWidth: 0,
+                        }}
+                        secureTextEntry={hideRetypePass}
+                        value={valueRetypePass}
+                        onChangeText={text => setValueRetypePass(text)}
+                        onFocus={() => {
+                          setFocusRetypePassword(true);
+                        }}
+                        onBlur={() => {
+                          setFocusRetypePassword(false);
+                        }}
+                        underlineColorAndroid="transparent"
+                      />
+                      <TouchableOpacity
+                        onPressIn={() => {
+                          setHideRetypePass(false);
+                        }}
+                        onPressOut={() => {
+                          setHideRetypePass(true);
+                        }}>
+                        <FontAwesomeIcon
+                          icon={faEye}
+                          style={{padding: 10, margin: 10}}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View style={{marginTop: 30}}>
+                    <Button title={'Save'} onPress={validate} />
+                  </View>
+                </View>
+              )}
+            </View>
           </View>
-        </View>
-      </ScrollView>
-    </TabView.Item>
+        </ScrollView>
+      </TabView.Item>
+    </>
   );
 }
 const styles = StyleSheet.create({
